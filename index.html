@@ -1,0 +1,488 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Novedades D&C</title><script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script><script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><style>
+:root{--n:#123552;--b:#1b6ca5;--s:#eaf3fa;--l:#c9dce9;--t:#203c52;--m:#516a7d;--bg:#f3f7fb;--amber:#aa681c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:15px/1.5 Arial,sans-serif;color:var(--t)}
+header{background:#123552;color:white;padding:26px max(24px,calc((100% - 1440px)/2));display:flex;justify-content:space-between;gap:24px;align-items:center}
+h1{margin:0;font-size:29px;line-height:1.2;letter-spacing:-.4px}.sub,.state{font-size:13px;color:#dcebf5;margin:8px 0 0}.state{text-align:right}
+.wrap{max-width:1440px;margin:auto;padding:24px}.box{background:white;border:1px solid var(--l);border-radius:12px;padding:20px;margin-bottom:18px}
+h2{font-size:21px;line-height:1.3;margin:0 0 10px;color:var(--n);font-weight:700}h3{font-size:16px;margin:0 0 6px}
+.note{font-size:13px;line-height:1.6;color:var(--m);margin:0 0 16px}.upload{display:flex;justify-content:space-between;align-items:center;gap:20px;border-left:4px solid var(--b)}
+.btn{background:var(--b);color:white;padding:11px 16px;border:0;border-radius:7px;font:600 14px Arial;cursor:pointer;display:inline-block}.btn input{display:none}.btn:disabled{opacity:.65;cursor:wait}
+.filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.filters label{font-size:13px;font-weight:600;color:#36546c}.filters input,.filters select,.clear{width:100%;height:42px;margin-top:6px;border:1px solid #abc5d8;border-radius:6px;background:white;padding:8px;font:14px Arial;color:var(--t)}.clear{font-weight:600;cursor:pointer}
+:focus-visible{outline:3px solid #bd781f;outline-offset:3px}.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:20px}
+.k{background:#eaf3fa;border:1px solid #a7c8df;border-top:4px solid var(--b);border-radius:12px;padding:22px}.k span{font-size:14px;font-weight:600;color:#3d5d74}.k b{display:block;font-size:39px;line-height:1.15;margin:12px 0 8px;color:var(--n);font-variant-numeric:tabular-nums}.k small{font-size:13px;color:var(--m)}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch;margin-bottom:18px}.three>.box{margin-bottom:0;display:flex;flex-direction:column;padding:16px}.three h2{font-size:18px;min-height:47px;margin-bottom:6px}.three>.box>.note{font-size:12px;min-height:39px;margin-bottom:10px}.three #tb,.three #mb{flex:1;display:flex;flex-direction:column}.three .bar{flex:1;min-height:27px;margin:3px 0;font-size:13px}.three .bar b{font-size:13px}.three .track{height:16px}.three .axis-row{margin-top:9px;flex:none}.three .axis-label{flex:none;font-size:12px}.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.three>*,.two>*{min-width:0}
+.chart{background:white;padding:4px;position:relative}.line{height:330px}.line svg{width:100%;height:100%}.chart-toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:10px;flex-wrap:wrap}.chart-toolbar label{font-size:13px}.chart-toolbar input{accent-color:var(--b)}
+.chart-keys{display:flex;gap:18px;font-size:13px;color:var(--m);align-items:center}.key-line{display:inline-block;width:24px;border-top:3px solid var(--b);margin-right:6px;vertical-align:middle}.key-average{border-color:#98631f;border-top-style:dashed}
+.pie{display:flex;flex-direction:column;padding:0;align-items:stretch}.pie svg{width:100%;min-height:220px;display:block;flex-shrink:0}.legend{width:100%;font-size:13px;line-height:1.5;max-height:none;overflow:visible}.three .pie{flex:1}.three .legend{flex:1;display:flex;flex-direction:column}.three .legend-row{flex:1;min-height:28px;align-items:center}
+.legend-row{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:9px;align-items:start;padding:6px 0;border-bottom:1px solid #e4ecf2}.legend-swatch{width:12px;height:12px;display:block;border-radius:3px;margin-top:4px}.legend-name{overflow-wrap:anywhere}.legend-value{white-space:nowrap;font-size:13px;font-variant-numeric:tabular-nums}
+.legend-heading{display:flex;justify-content:space-between;color:var(--m);font-size:12px;font-weight:600;padding:8px 0}
+details{margin-top:16px;width:100%}summary{font-size:13px;color:#235e88;cursor:pointer;font-weight:600}.route-detail{font-size:13px;line-height:1.7;margin-top:10px}
+.bar{display:grid;grid-template-columns:minmax(105px,1.25fr) minmax(0,1.7fr) 44px;gap:10px;align-items:center;margin:16px 0;font-size:14px}.bar label{overflow-wrap:anywhere;line-height:1.4}.bar label small{display:block;font-size:12px;color:var(--m);margin-top:4px}.bar b{font-size:14px;text-align:right;font-variant-numeric:tabular-nums}
+.track{height:20px;background:repeating-linear-gradient(to right,#dce6ee 0,#dce6ee 1px,transparent 1px,transparent 25%),#edf3f7;border-radius:3px;overflow:hidden}.fill{height:100%;min-width:2px;border-radius:3px;border-right:1px solid #366e97}
+.axis-row{display:grid;grid-template-columns:minmax(105px,1.25fr) minmax(0,1.7fr) 44px;gap:10px;font-size:12px;color:var(--m)}.axis-ticks{display:flex;justify-content:space-between}.axis-label{font-size:13px;text-align:center;margin-top:9px;color:var(--m)}
+#tb,#mb,.scroll-panel{max-height:none;overflow:visible}.table{max-height:510px;overflow:auto;border:1px solid #cfdfeb;border-radius:8px}
+table{border-collapse:collapse;width:100%;min-width:760px;table-layout:fixed;font-size:14px}thead{position:sticky;top:0;z-index:1;background:#e8f2f9}
+th,td{text-align:left;padding:12px;border-bottom:1px solid #e5edf4;white-space:normal;overflow-wrap:anywhere;vertical-align:top}th{color:#244963;font-weight:600}
+tbody tr:nth-child(even){background:#f5f9fc}tbody tr:hover{background:#eaf3fa}.tag{display:inline-block;min-width:32px;text-align:center;background:#e0eef8;color:#18577f;font-weight:600;padding:4px 8px;border-radius:5px}
+#technicalSection th:last-child,#technicalSection td:last-child{text-align:center}#technicalSection th:last-child{width:28%}#technicalSection td[colspan]{text-align:left}tfoot th{background:#e2eff8;border-top:2px solid #adcadd}
+.insight{padding:14px 16px;background:#edf5fb;border-left:3px solid #2b73a4;border-radius:5px;font-size:14px;line-height:1.65;margin:12px 0 18px}.chart-summary{font-size:14px;color:var(--m);margin:12px 0}
+.report{border-left:4px solid var(--b)}#read{width:100%;margin:0}.email-subject{font-size:14px;border-bottom:1px solid #dae6ef;padding:12px 0;margin-bottom:22px}.email-body p{font-size:15px;line-height:1.75;margin:0 0 18px}.email-body h3{font-size:17px;margin:24px 0 14px}
+.tip{display:none;position:absolute;background:#123552;color:white;padding:10px;border-radius:6px;font-size:13px;z-index:2}
+.export-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px 22px;margin:20px 0}.export-options label{display:flex;gap:10px;align-items:center;font-size:14px}.export-options input{accent-color:var(--b);width:18px;height:18px}
+.export-board .kpis{grid-template-columns:repeat(3,1fr)!important}.export-board .table,.export-board .legend,.export-board #tb,.export-board #mb,.export-board .scroll-panel{max-height:none!important;height:auto!important;overflow:visible!important}.export-board table{min-width:0!important}.export-board thead{position:static!important}.export-board .export-hide{display:none!important}
+[hidden]{display:none!important}
+@media(max-width:1100px){.three h2,.three>.box>.note{min-height:0}.three .bar{flex:none;margin:8px 0}.three{grid-template-columns:1fr}.three .pie{display:grid;grid-template-columns:1fr 1fr;gap:20px}.three .pie details{grid-column:1/-1}.two{grid-template-columns:1fr}.filters{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:620px){.wrap{padding:12px}.box{padding:18px}header{padding:22px;display:block}h1{font-size:26px}.state{text-align:left}.filters{grid-template-columns:repeat(2,minmax(0,1fr))}.kpis{grid-template-columns:1fr}.three .pie{display:flex}.upload{align-items:flex-start;flex-direction:column}.export-options{grid-template-columns:1fr}.line{height:320px}}
+</style></head><body><header><div><h1>Tablero Ejecutivo de Novedades en Ruta</h1><p class="sub">D&C Equipos · Seguimiento operativo y reincidencias</p></div><div id="state" class="state">Datos cargados: —</div></header><main class="wrap">
+<section class="box upload"><div><b>Actualizar información diaria</b><p class="note">El tablero procesa únicamente la hoja <b>D&C EQUIPOS</b>.</p></div><label class="btn">Seleccionar Excel<input id="file" type="file" accept=".xlsx,.xls"></label></section>
+<section class="box"><div class="filters"><label>Desde<input id="from" type="date"></label><label>Hasta<input id="to" type="date"></label><label>Propietario<select id="owner"></select></label><label>Lugar de novedad<select id="place"></select></label><label>Tipología<select id="type"></select></label><label>Ruta<select id="route"></select></label><label>Causa de varada<select id="cause"></select></label><label>Reportado por<select id="rep"></select></label><button id="clear" class="clear">Limpiar filtros</button></div></section>
+<section class="kpis" data-export="cards"><article class="k"><span>Varadas en ruta</span><b id="r">—</b><small>Interrupciones en operación</small></article><article class="k"><span>Vehículos afectados</span><b id="v">—</b><small>Con al menos una novedad</small></article><article class="k"><span>Reincidencias anuales ≥ 2</span><b id="q">—</b><small>Historial repetido</small></article></section>
+<section class="box" data-export="detail"><h2>Detalle de novedades</h2><p id="info" class="note">Orden ascendente: fecha más antigua a más reciente.</p><div class="table"><table><thead><tr><th>Fecha</th><th>Vehículo</th><th>Lugar</th><th>Tipología</th><th>Ruta</th><th>Causa varada</th><th>Rec. mes</th><th>Rec. año</th></tr></thead><tbody id="detail"></tbody></table></div></section>
+<section class="box" data-export="line"><h2>Comportamiento diario de varadas en ruta</h2><p id="lineScope" class="note"></p><div class="chart-toolbar"><div class="chart-keys"><span><i class="key-line"></i>Eventos diarios</span><span id="averageKey" hidden><i class="key-line key-average"></i>Media móvil · 7 días</span></div><label class="export-hide"><input id="rollingToggle" type="checkbox"> Mostrar media móvil de 7 días</label></div><div class="chart line"><div id="tip" class="tip"></div><svg id="line" viewBox="0 0 1050 285"></svg></div></section>
+<section class="three"><article class="box" data-export="route"><h2>Varadas por ruta</h2><p class="note">Cinco rutas principales y otras. Cantidad y porcentaje de varadas por ruta.</p><div class="chart pie"><svg id="pie" viewBox="0 0 320 260"></svg><div id="leg" class="legend"></div><details id="routeBreakdown"><summary>Ver el desglose completo de rutas</summary><div id="routeDetail" class="route-detail"></div></details></div></article><article class="box" data-export="type"><h2 id="typeTitle">Novedades por tipología</h2><p class="note">Frecuencia por tipo de vehículo.</p><div id="tb" class="chart"></div></article><article class="box" data-export="model"><h2 id="modelTitle">Novedades por modelo</h2><p class="note">Frecuencia por año de modelo.</p><div id="mb" class="chart"></div></article></section>
+<section class="box" data-export="causes"><h2>Causas con mayor frecuencia en el período filtrado</h2><p class="note">Hasta diez causas, ordenadas de mayor a menor número de eventos. El porcentaje de cada causa se calcula sobre todas las novedades filtradas.</p><p id="causesSummary" class="insight"></p><div id="cb" class="scroll-panel"></div></section>
+<section class="box" data-export="vehicles"><h2 id="vehiclesTitle">Top 10 anual · Vehículos con más varadas en ruta</h2><p id="vehiclesSummary" class="chart-summary"></p><div id="vehicleBars" class="scroll-panel"></div></section>
+
+<section class="box" id="technicalSection" data-export="technical"><h2>Seguimiento técnico de reincidencias</h2><p id="technicalScope" class="note">Selecciona propietario, lugar de novedad u otro filtro de categoría para consultar los últimos tres meses.</p><div class="table" id="technicalTableWrap" hidden><table><thead><tr><th>Técnico que atendió novedad</th><th>Vehículo</th><th>Causa varada</th><th>Reincidencia durante los últimos 3 meses</th></tr></thead><tbody id="technicalBody"></tbody><tfoot><tr><th colspan="3">Total general</th><th id="technicalTotal">0</th></tr></tfoot></table></div></section>
+<section class="box report" data-export="executive"><h2>Análisis ejecutivo y acciones de mantenimiento</h2><div id="emailSubject" class="email-subject"></div><div id="read" class="email-body"></div></section>
+<section class="box" id="exportBox"><h2>Descargar infografía o PDF</h2><p class="note export-note">Seleccione las secciones que desea incluir. Se generará <b>una sola imagen</b> con las secciones completas. Las imágenes extensas se guardan en SVG para conservar todas las filas; las demás, en PNG.</p><div class="export-options"><label><input type="checkbox" value="cards" checked> 1. Tarjetas</label><label><input type="checkbox" value="detail"> 2. Detalle de novedades</label><label><input type="checkbox" value="line" checked> 3. Comportamiento diario</label><label><input type="checkbox" value="route" checked> 4. Varadas por ruta</label><label><input type="checkbox" value="type" checked> 5. Novedades por tipología</label><label><input type="checkbox" value="model" checked> 6. Novedades por modelo</label><label><input type="checkbox" value="causes" checked> 7. Causas con mayor frecuencia</label><label><input type="checkbox" value="vehicles" checked> 8. Top 10 anual de vehículos</label><label><input id="exportTechnical" type="checkbox" value="technical" checked> 9. Seguimiento técnico de reincidencias</label></div><button id="export" class="btn download">Descargar imagen consolidada</button><button id="exportPdf" class="btn download" style="margin-left:10px">Guardar como PDF</button><p class="note export-note">PDF: selecciona las secciones de la lista y pulsa «Guardar como PDF». En la ventana de impresión, elige «Guardar como PDF». Las tablas se distribuyen en las páginas necesarias con todas sus filas.</p><p id="exportStatus" class="note" aria-live="polite"></p></section>
+</main><script src="data.js"></script><script>
+const TechnicalTable = (() => {
+  'use strict';
+  const X = 'REINCIDENCIA TECNICO VARADO EN RUTA - INICIO';
+  const normalize = value => String(value ?? '').trim().toUpperCase().replace(/\s+/g, ' ');
+  const clean = value => String(value ?? '').trim().replace(/\s+/g, ' ');
+  const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function value(row, name) {
+    const key = Object.keys(row).find(key => normalize(key) === normalize(name));
+    return key === undefined ? '' : row[key];
+  }
+  function date(input) {
+    if (input instanceof Date) return input;
+    if (typeof input === 'number') {
+      const utc = new Date(Math.round((input - 25569) * 86400000));
+      return new Date(utc.getUTCFullYear(), utc.getUTCMonth(), utc.getUTCDate());
+    }
+    const text = String(input ?? '');
+    let match = text.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (match) return new Date(+match[1], +match[2]-1, +match[3]);
+    match = text.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    return match ? new Date(+match[3], +match[2]-1, +match[1]) : new Date(text);
+  }
+  function knownFormula(formula) {
+    const text = normalize(formula);
+    return /COUNTIFS\(/.test(text) && ['[CAUSA VARADA]', '[PLACA]', '[AÑO]', '[LUGAR NOVEDAD]', '[TECNICO QUE ATENDIO NOVEDAD]'].every(part => text.includes(part));
+  }
+  // Esta fórmula cuenta en la hoja completa por placa, año, lugar, técnico y causa.
+  // La ventana de los últimos tres meses se aplica después del cálculo original.
+  function prepare(rows) {
+    const records = rows.map(row => {
+      const d = date(value(row, 'FECHA'));
+      const place = clean(value(row, 'LUGAR NOVEDAD'));
+      const numeric = value(row, X);
+      return {
+        date:d, month:Number.isNaN(+d) ? '' : d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'),
+        year:clean(value(row,'AÑO')) || (Number.isNaN(+d) ? '' : String(d.getFullYear())),
+        plate:normalize(value(row,'PLACA')), vehicle:clean(value(row,'VEH')),
+        technician:clean(value(row,'TECNICO QUE ATENDIO NOVEDAD')), cause:clean(value(row,'CAUSA VARADA')),
+        owner:normalize(value(row,'PROPIETARIO')).includes('EQUIPOS') ? 'D&C EQUIPOS' : 'Afiliados',
+        place, location:normalize(place).includes('RUTA') ? 'En ruta' : normalize(place).includes('PORTAL') ? 'En portal' : place ? 'Otro lugar' : 'Sin lugar informado',
+        type:clean(value(row,'TIPOLOGIA')), route:clean(value(row,'RUTA 46') || value(row,'RUTA')), reporter:clean(value(row,'REPORTADO POR')),
+        x:numeric === '' || numeric === null ? null : Number(String(numeric).replace(',','.')),
+        formula:row.__technicalFormula || '', recalculated:false
+      };
+    });
+    const counts = new Map();
+    const key = row => JSON.stringify([row.plate,normalize(row.year),normalize(row.place),normalize(row.technician),normalize(row.cause)]);
+    records.forEach(row => counts.set(key(row), (counts.get(key(row)) || 0)+1));
+    records.forEach(row => {
+      if (knownFormula(row.formula)) {row.x = counts.get(key(row)); row.recalculated = true;}
+    });
+    return records;
+  }
+  function recentWindow(now=new Date()) {
+    const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Bogota',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now);
+    const part=name=>Number(parts.find(p=>p.type===name).value);
+    const end=new Date(part('year'),part('month')-1,part('day'));
+    const start=new Date(end.getFullYear(),end.getMonth()-3,1);
+    start.setDate(Math.min(end.getDate(),new Date(start.getFullYear(),start.getMonth()+1,0).getDate()));
+    return {start,end,until:new Date(end.getFullYear(),end.getMonth(),end.getDate()+1)};
+  }
+  function summarize(records, filters, now=new Date()) {
+    const {start,end,until}=recentWindow(now);
+    const fields = {owner:'owner',place:'location',type:'type',route:'route',cause:'cause',rep:'reporter'};
+    const scoped = records.filter(row => row.date>=start && row.date<until && Object.entries(fields).every(([filter,field]) => !filters[filter] || normalize(row[field])===normalize(filters[filter])));
+    const selected = scoped.filter(row => row.technician && Number.isFinite(row.x) && row.x>=2);
+    const groups = new Map();
+    selected.forEach(row => {
+      const key = JSON.stringify([normalize(row.technician),normalize(row.vehicle),normalize(row.cause)]);
+      if (!groups.has(key)) groups.set(key,{technician:row.technician,vehicle:row.vehicle || 'Sin vehículo informado',cause:row.cause || 'Sin causa informada',count:0,dates:[]});
+      const group=groups.get(key);group.count++;group.dates.push(row.date);
+    });
+    const result = [...groups.values()].sort((a,b)=>a.technician.localeCompare(b.technician,'es')||a.vehicle.localeCompare(b.vehicle,'es',{numeric:true})||a.cause.localeCompare(b.cause,'es'));
+    result.forEach(row=>row.dates.sort((a,b)=>a-b));
+    return {rows:result,total:selected.length,scoped:scoped.length,start,end,recalculated:selected.some(row=>row.recalculated)};
+  }
+  function attachFormulaMetadata(rows, sheet, xlsx) {
+    const range = xlsx.utils.decode_range(sheet['!ref']);
+    let column = null;
+    for (let c=range.s.c;c<=range.e.c;c++) {
+      const cell = sheet[xlsx.utils.encode_cell({r:range.s.r,c})];
+      if (cell && normalize(cell.v)===X) {column=c;break;}
+    }
+    if (column === null) throw Error('No se encontró la columna '+X+' en la hoja D&C EQUIPOS.');
+    rows.forEach(row => {
+      if (!Number.isInteger(row.__rowNum__)) return;
+      const cell = sheet[xlsx.utils.encode_cell({r:row.__rowNum__,c:column})];
+      if (cell?.f) row.__technicalFormula=cell.f;
+    });
+    return rows;
+  }
+  function monthLabel(month) {
+    return new Intl.DateTimeFormat('es-CO',{month:'long',year:'numeric'}).format(date(month+'-01'));
+  }
+  let source = [], records = null;
+  function load(rows) {source=rows;records=null;}
+  function render() {
+    const filters = Object.fromEntries(['owner','place','type','route','cause','rep'].map(id=>[id,document.getElementById(id).value]));
+    const active = Object.values(filters).some(Boolean);
+    document.getElementById('technicalTableWrap').hidden=!active;
+    if (!active) {
+      document.getElementById('technicalScope').innerHTML='Selecciona propietario, lugar de novedad u otro filtro de categoría para consultar los últimos tres meses.';
+      document.getElementById('technicalBody').innerHTML='';
+      document.getElementById('technicalTotal').textContent='';
+      return null;
+    }
+    if (records === null) records=prepare(source);
+    const result = summarize(records,filters);
+    const format=d=>new Intl.DateTimeFormat('es-CO',{day:'2-digit',month:'2-digit',year:'numeric'}).format(d);
+    document.getElementById('technicalScope').innerHTML='<b>Últimos tres meses:</b> '+format(result.start)+' al '+format(result.end)+'. Pasa el cursor sobre la cuenta para ver las fechas de intervención.';
+    document.getElementById('technicalBody').innerHTML=result.rows.length ? result.rows.map(row=>{
+      const dates=row.dates.map((d,i)=>(i+1)+'. '+format(d)).join('\n');
+      const label='Fechas de intervención ('+row.count+' registros):\n'+dates;
+      return '<tr><td>'+escape(row.technician)+'</td><td>'+escape(row.vehicle)+'</td><td>'+escape(row.cause)+'</td><td><span class="tag intervention-count" tabindex="0" title="'+escape(label)+'" aria-label="'+escape(label)+'">'+row.count+'</span></td></tr>';
+    }).join('') : '<tr><td colspan="4">No hay registros de reincidencias técnicas en los últimos tres meses para los filtros aplicados.</td></tr>';
+    document.getElementById('technicalTotal').textContent=result.total;
+    return result;
+  }
+
+  return {prepare,summarize,recentWindow,attachFormulaMetadata,load,render};
+})();
+const $=x=>document.getElementById(x),N=x=>String(x??'').trim().toUpperCase().replace(/\s+/g,' '),E=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));let A=[];const F={d:['FECHA'],v:['VEH'],t:['TIPOLOGIA'],m:['MODELO'],o:['PROPIETARIO'],r:['RUTA','RUTA 46'],l:['LUGAR NOVEDAD'],c:['CAUSA VARADA'],p:['REPORTADO POR']};function get(r,a){let k=Object.keys(r).find(x=>a.includes(N(x)));return k?r[k]:''}function dt(x){
+ if(x instanceof Date)return x;
+ if(typeof x==='number'){const d=new Date(Math.round((x-25569)*864e5));return new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate())}
+ const text=String(x),ymd=text.match(/^(\d{4})-(\d{2})-(\d{2})/),dmy=text.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+ return ymd?new Date(+ymd[1],+ymd[2]-1,+ymd[3]):dmy?new Date(+dmy[3],+dmy[2]-1,+dmy[1]):new Date(x);
+}function loc(x){x=N(x);return x.includes('RUTA')?'En ruta':x.includes('PORTAL')?'En portal':x?'Otro lugar':'Sin lugar informado'}function own(x){return N(x).includes('EQUIPOS')?'D&C EQUIPOS':'Afiliados'}function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}function fd(d){return new Intl.DateTimeFormat('es-CO',{day:'2-digit',month:'short',year:'numeric'}).format(d)}function prep(rows){let a=rows.map((r,i)=>{let d=dt(get(r,F.d));return{d,v:String(get(r,F.v)).trim(),t:String(get(r,F.t)).trim(),m:String(get(r,F.m)).trim(),o:own(get(r,F.o)),r:String(get(r,F.r)).trim(),l:loc(get(r,F.l)),place:String(get(r,F.l)).trim(),c:String(get(r,F.c)).trim(),p:String(get(r,F.p)).trim(),tech:String(get(r,['TECNICO QUE ATENDIO NOVEDAD'])).trim(),tr:Number(get(r,['REINCIDENCIA TECNICO VARADO EN RUTA - INICIO']))||0,i}}).filter(x=>x.d&&!isNaN(x.d)&&x.v&&x.c).sort((a,b)=>a.d-b.d||a.i-b.i),y=new Map(),mo=new Map();a.forEach(x=>{let k=x.d.getFullYear()+'|'+x.v+'|'+N(x.c),m=x.d.getFullYear()+'-'+x.d.getMonth()+'|'+k;x.yr=(y.get(k)||0)+1;x.mn=(mo.get(m)||0)+1;y.set(k,x.yr);mo.set(m,x.mn)});return a}function opts(id,a){let e=$(id),o=e.value;e.innerHTML='<option value="">Todos</option>'+[...new Set(a)].filter(Boolean).sort((a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true})).map(x=>'<option>'+E(x)+'</option>').join('');if([...e.options].some(x=>x.value===o))e.value=o}function load(rows){TechnicalTable.load(rows);A=prep(rows);let ds=A.map(x=>x.d);$('from').value='';$('to').value='';opts('owner',['D&C EQUIPOS','Afiliados']);opts('place',['En ruta','En portal','Otro lugar','Sin lugar informado']);['type','route','cause','rep'].forEach((id,i)=>opts(id,A.map(x=>x[['t','r','c','p'][i]])));$('state').innerHTML=`Datos cargados: ${A.length.toLocaleString('es-CO')} registros<br>Periodo: ${ds.length?fd(ds[0])+' – '+fd(ds.at(-1)):'Sin registros'}`;render()}function fil(){let f=$('from').value?new Date($('from').value+'T00:00'):null,t=$('to').value?new Date($('to').value+'T23:59'):null;return A.filter(x=>(!f||x.d>=f)&&(!t||x.d<=t)&&(!$('owner').value||x.o===$('owner').value)&&(!$('place').value||x.l===$('place').value)&&(!$('type').value||x.t===$('type').value)&&(!$('route').value||x.r===$('route').value)&&(!$('cause').value||x.c===$('cause').value)&&(!$('rep').value||x.p===$('rep').value))}function cnt(a,k){return[...a.reduce((m,x)=>m.set(x[k]||'Sin información',(m.get(x[k]||'Sin información')||0)+1),new Map())].sort((a,b)=>b[1]-a[1])}
+function lineWindow(){
+  const from=$('from').value,to=$('to').value;
+  const latest=A.length?A[A.length-1].d:null;
+  const year=latest?latest.getFullYear():new Date().getFullYear();
+  const asMonth=text=>{const p=text.split('-').map(Number);return p[0]*12+p[1]-1};
+  let first=from?asMonth(from):to?asMonth(to):year*12;
+  let last=to?asMonth(to):from?asMonth(from):year*12+11;
+  if(first>last)[first,last]=[last,first];
+  const start=new Date(Math.floor(first/12),first%12,1),end=new Date(Math.floor(last/12),last%12+1,0);
+  const month=d=>new Intl.DateTimeFormat('es-CO',{month:'long',year:'numeric'}).format(d);
+  return {start,end,latest,year,filtered:!!(from||to),caption:from||to?(first===last?month(start):month(start)+' a '+month(end)):'año '+year};
+}
+function lineMonthRows(){
+  const period=lineWindow();
+  const fields=[['owner','o'],['place','l'],['type','t'],['route','r'],['cause','c'],['rep','p']];
+  return A.filter(x=>x.d>=period.start&&x.d<new Date(period.end.getFullYear(),period.end.getMonth(),period.end.getDate()+1)&&fields.every(([id,key])=>!$(id).value||x[key]===$(id).value));
+}
+function lineSeries(){
+  const period=lineWindow(),counts=new Map();
+  const rows=lineMonthRows().filter(x=>x.l==='En ruta');
+  rows.forEach(x=>{const k=iso(x.d);counts.set(k,(counts.get(k)||0)+1)});
+  const first=A.length&&A[0].d>period.start?A[0].d:period.start;
+  const last=period.latest&&period.latest<period.end?period.latest:period.end,points=[];
+  if(rows.length)for(let d=new Date(first);d<=last;d.setDate(d.getDate()+1))points.push({date:new Date(d),key:iso(d),n:counts.get(iso(d))||0});
+  return {period:{...period,plotStart:first,plotEnd:last},rows,points};
+}
+function rollingAverage(points){return points.slice(6).map((p,i)=>({date:p.date,n:points.slice(i,i+7).reduce((s,x)=>s+x.n,0)/7}))}
+function line(){
+  const {period,points}=lineSeries(),svg=$('line');
+  $('lineScope').textContent=(period.filtered?'Meses completos: ':'Sin filtro de fechas: ')+period.caption+'. Se mantienen los demás filtros. '+(period.latest?'Archivo con información hasta el '+fd(period.latest)+'.':'Sin registros cargados.')+' Los días sin filas indican cero reportes registrados; no confirman ausencia de fallas.';
+  $('averageKey').hidden=!$('rollingToggle').checked;
+  if(!points.length){svg.innerHTML='<text x="525" y="140" text-anchor="middle" fill="#5b7185">Sin varadas en ruta para este alcance</text>';return}
+  const W=1050,H=285,p={l:65,r:30,t:36,b:57},cw=W-p.l-p.r,ch=H-p.t-p.b;
+  const max=Math.max(...points.map(x=>x.n),1),step=Math.max(1,Math.ceil(max/4)),upper=step*4;
+  const span=Math.max(864e5,period.plotEnd-period.plotStart);
+  const xPosition=date=>p.l+(period.plotEnd>period.plotStart?(date-period.plotStart)/span*cw:cw/2);
+  points.forEach(pt=>{pt.x=xPosition(pt.date);pt.y=p.t+ch-pt.n/upper*ch});
+  const grid=Array.from({length:5},(_,i)=>{
+    const y=p.t+ch-i/4*ch;
+    return '<line x1="'+p.l+'" x2="'+(W-p.r)+'" y1="'+y+'" y2="'+y+'" stroke="#dbe8f1"/><text x="'+(p.l-10)+'" y="'+(y+4)+'" text-anchor="end" font-size="13" fill="#5b7185">'+(i*step)+'</text>';
+  }).join('');
+  const averages=rollingAverage(points);
+  const averagePath=averages.map((pt,i)=>(i?'L':'M')+xPosition(pt.date)+','+(p.t+ch-pt.n/upper*ch)).join(' ');
+  const path=points.map((pt,i)=>(i?'L':'M')+pt.x+','+pt.y).join(' ');
+  const ticks=[];
+  if(!period.filtered){
+    for(let date=new Date(period.plotStart.getFullYear(),period.plotStart.getMonth(),1);date<=period.plotEnd;date.setMonth(date.getMonth()+1)){
+      ticks.push(new Date(Math.max(+date,+period.plotStart)));
+    }
+  }else{
+    const intervals=Math.min(8,Math.round((period.plotEnd-period.plotStart)/864e5));
+    if(!intervals)ticks.push(new Date(period.plotStart));
+    else for(let i=0;i<=intervals;i++)ticks.push(new Date(+period.plotStart+(period.plotEnd-period.plotStart)*i/intervals));
+  }
+  const format=d=>new Intl.DateTimeFormat('es-CO',period.filtered?{day:'2-digit',month:'short'}:{month:'short'}).format(d);
+  svg.innerHTML='<title>Varadas diarias en ruta: '+E(period.caption)+'</title><text x="525" y="18" text-anchor="middle" font-size="14" font-weight="bold" fill="#234b6b">Varadas diarias en ruta · '+E(period.caption)+'</text>'+grid+
+    '<path d="'+path+'" fill="none" stroke="#1879b6" stroke-width="2.5"/>'+
+    ($('rollingToggle').checked&&averagePath?'<path d="'+averagePath+'" fill="none" stroke="#98631f" stroke-width="3" stroke-dasharray="8 5"/>':'')+
+    points.map(pt=>'<circle class="pt" data-d="'+pt.key+'" data-n="'+pt.n+'" cx="'+pt.x+'" cy="'+pt.y+'" r="'+(points.length>90?1.5:3)+'" fill="#1879b6"><title>'+pt.key+': '+pt.n+' varadas</title></circle>').join('')+
+    ticks.map(d=>'<text x="'+xPosition(d)+'" y="248" text-anchor="middle" font-size="13" fill="#5b7185">'+E(format(d))+'</text>').join('')+
+    '<text x="525" y="278" text-anchor="middle" font-size="14" fill="#405d73">Fecha</text><text x="16" y="145" text-anchor="middle" font-size="14" fill="#405d73" transform="rotate(-90 16 145)">Número de varadas</text>';
+  svg.querySelectorAll('.pt').forEach(el=>{
+    el.onmouseenter=event=>{const tip=$('tip');tip.style.display='block';tip.style.left='55%';tip.style.top='35px';tip.innerHTML='<b>'+event.target.dataset.n+'</b> varadas · '+event.target.dataset.d};
+    el.onmouseleave=()=>$('tip').style.display='none';
+  });
+}
+function render(){let d=fil().sort((a,b)=>a.d-b.d),rt=d.filter(x=>x.l==='En ruta'),ca=cnt(d,'c'),ru=cnt(rt,'r'),ty=cnt(d,'t'),mo=cnt(d,'m'),g=[...d.reduce((m,x)=>{let k=x.v+'|'+x.c,v=m.get(k)||{v:x.v,c:x.c,r:x.r,n:0};v.n++;m.set(k,v);return m},new Map()).values()].sort((a,b)=>b.n-a.n),top=g[0],share=d.length?Math.round(rt.length/d.length*100):0;$('r').textContent=num(rt.length);$('v').textContent=num(new Set(d.map(x=>x.v)).size);$('q').textContent=num(d.filter(x=>x.yr>=2).length);$('typeTitle').textContent=($('place').value==='En ruta'?'Varadas':'Novedades')+' por tipología';$('modelTitle').textContent=($('place').value==='En ruta'?'Varadas':'Novedades')+' por modelo';line(d);pie(d);bars('tb',ty);bars('mb',mo);renderDiagnostics(d);$('info').textContent=`${d.length} registros ordenados ascendentemente desde la fecha más antigua hasta la más reciente.`;$('detail').innerHTML=d.length?d.map(x=>`<tr><td>${fd(x.d)}</td><td>${E(x.v)}</td><td>${E(x.place||'—')}</td><td>${E(x.t||'—')}</td><td>${E(x.r||'—')}</td><td>${E(x.c)}</td><td><span class='tag'>${x.mn}</span></td><td><span class='tag'>${x.yr}</span></td></tr>`).join(''):'<tr><td colspan="8">Sin datos</td></tr>'}
+['from','to','owner','place','type','route','cause','rep'].forEach(x=>$(x).onchange=render);$('clear').onclick=()=>{let d=A.map(x=>x.d);$('from').value='';$('to').value='';['owner','place','type','route','cause','rep'].forEach(x=>$(x).value='');render()};$('file').onchange=async e=>{try{let w=XLSX.read(await e.target.files[0].arrayBuffer(),{type:'array',cellDates:true}),s=w.Sheets['D&C EQUIPOS'];if(!s)throw Error('No se encontró la hoja D&C EQUIPOS.');load(TechnicalTable.attachFormulaMetadata(XLSX.utils.sheet_to_json(s,{defval:'',raw:true}),s,XLSX))}catch(e){alert('No fue posible procesar el archivo: '+e.message)}};
+
+function num(value){return Number(value).toLocaleString('es-CO',{maximumFractionDigits:0})}
+function percent(value){return Number(value).toLocaleString('es-CO',{minimumFractionDigits:1,maximumFractionDigits:1})+'%'}
+function categoricalMatch(row){return [['owner','o'],['place','l'],['type','t'],['route','r'],['cause','c'],['rep','p']].every(([id,k])=>!$(id).value||row[k]===$(id).value)}
+function exactCaption(){return ($('from').value?fd(dt($('from').value)):'Inicio del archivo')+' – '+($('to').value?fd(dt($('to').value)):'Última fecha disponible')}
+function bars(id,items,options={}){
+  const rows=items,max=Math.max(1,...rows.map(x=>x[1])),step=Math.max(1,Math.ceil(max/4)),upper=max<=4?max:step*4;
+  if(!rows.length){$(id).innerHTML='<p class="note">'+E(options.empty||'Sin registros para los filtros aplicados.')+'</p>';return}
+  const ticks=max<=4?Array.from({length:upper+1},(_,i)=>i):Array.from({length:5},(_,i)=>i*step);
+  $(id).innerHTML=rows.map(([name,n,sub],i)=>{
+    const light=options.chronological?38:29+(rows.length>1?i/(rows.length-1)*25:0),color='hsl(207, 65%, '+light+'%)';
+    return '<div class="bar"><label>'+(!options.chronological?(i+1)+'. ':'')+E(name)+(sub?'<small>'+E(sub)+'</small>':'')+'</label><div class="track"><div class="fill" style="width:'+(n/upper*100)+'%;min-width:'+(n?2:0)+'px;background:'+color+'"></div></div><b>'+num(n)+'</b></div>';
+  }).join('')+'<div class="axis-row"><span></span><div class="axis-ticks">'+ticks.map(n=>'<span>'+num(n)+'</span>').join('')+'<span></span></div><div class="axis-label">'+E(options.unit||'Número de eventos')+'</div>';
+}
+function routeName(name){return N(name)||'Sin ruta informada'}
+function routeColor(name){
+  const fixed={'F1':'#175d91','F2':'#427fbc','JUAN MINA':'#197c7e','RUTA 46':'#b27920','SOLEDAD 2000':'#79549c','MALVINAS':'#be6350','B15':'#547642','MAKRO':'#99566e','REPARTO':'#886b45','RIOMAR':'#436581','TRANSMETRO':'#466e50','TUBARA':'#8b7844','ESCOJA RUTA':'#758594','SIN RUTA INFORMADA':'#758594','OTRAS RUTAS':'#a2adb7'};
+  const key=N(name);if(fixed[key])return fixed[key];
+  let hash=0;for(const ch of key)hash=(hash*31+ch.charCodeAt(0))>>>0;
+  return 'hsl('+(hash%360)+', 48%, 40%)';
+}
+function routeDistribution(rows){
+  const all=cnt(rows.filter(x=>x.l==='En ruta').map(x=>({...x,r:routeName(x.r)})),'r');
+  const visible=all.slice(0,5);if(all.length>5)visible.push(['Otras rutas',all.slice(5).reduce((s,x)=>s+x[1],0)]);
+  return {all,visible};
+}
+function pieLayout(data){
+  const total=data.reduce((sum,x)=>sum+x[1],0),cx=220,r=116;
+  let angle=-Math.PI/2;
+  const slices=data.map(([name,n],i)=>{
+    const end=angle+n/total*Math.PI*2,mid=(angle+end)/2;
+    const item={name,n,index:i,start:angle,end,mid,side:Math.cos(mid)>=0?1:-1};
+    angle=end;return item;
+  });
+  const count=Math.max(...[-1,1].map(side=>slices.filter(x=>x.side===side).length),1);
+  const height=Math.max(300,count*25+30),cy=height/2;
+  for(const side of [-1,1]){
+    const items=slices.filter(x=>x.side===side).sort((a,b)=>Math.sin(a.mid)-Math.sin(b.mid));
+    items.forEach((x,i)=>{x.y=Math.max(cy+132*Math.sin(x.mid),i?items[i-1].y+25:20)});
+    if(items.length&&items.at(-1).y>height-20){
+      items.at(-1).y=height-20;
+      for(let i=items.length-2;i>=0;i--)items[i].y=Math.min(items[i].y,items[i+1].y-25);
+    }
+  }
+  return {slices,cx,cy,r,height,total};
+}
+function pie(rows){
+  const distribution=routeDistribution(rows),data=distribution.visible,chart=pieLayout(data);
+  const {slices,cx,cy,r,height,total}=chart;
+  const color=i=>routeColor(data[i][0]);
+  $('routeDetail').innerHTML=distribution.all.map(([name,n])=>'<div class="legend-row"><span class="legend-swatch" style="background:'+routeColor(name)+'"></span><span>'+E(name)+'</span><b>'+num(n)+' · '+percent(n/total*100)+'</b></div>').join('');
+  $('pie').setAttribute('viewBox','0 0 440 '+height);
+  $('pie').style.height=Math.max(220,height*.72)+'px';
+  $('pie').setAttribute('role','img');
+  $('pie').setAttribute('aria-label','Varadas por ruta; líneas externas con la cantidad de cada segmento');
+  if(!total){$('pie').innerHTML='<text x="220" y="150" text-anchor="middle" fill="#5b7185">Sin varadas en ruta</text>';$('leg').innerHTML='';return}
+  const sectors=slices.map(x=>{
+    const title='<title>'+E(x.name)+': '+x.n+' varadas ('+(x.n/total*100).toFixed(1)+'%)</title>';
+    return slices.length===1?'<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+color(x.index)+'">'+title+'</circle>':
+      '<path d="M'+cx+','+cy+' L'+(cx+r*Math.cos(x.start))+','+(cy+r*Math.sin(x.start))+' A'+r+','+r+' 0 '+(x.end-x.start>Math.PI?1:0)+' 1 '+(cx+r*Math.cos(x.end))+','+(cy+r*Math.sin(x.end))+' Z" fill="'+color(x.index)+'" stroke="white" stroke-width="2">'+title+'</path>';
+  }).join('');
+  const leaders=slices.map(x=>{
+    const sx=cx+r*Math.cos(x.mid),sy=cy+r*Math.sin(x.mid),bend=cx+x.side*134,ex=cx+x.side*154;
+    return '<polyline class="pie-leader" points="'+sx+','+sy+' '+bend+','+x.y+' '+ex+','+x.y+'" fill="none" stroke="'+color(x.index)+'" stroke-width="1.8"/><circle cx="'+sx+'" cy="'+sy+'" r="2.5" fill="'+color(x.index)+'"/><text class="pie-value" x="'+(ex+x.side*5)+'" y="'+(x.y+5)+'" text-anchor="'+(x.side>0?'start':'end')+'" font-size="17" font-weight="bold" fill="#23445e">'+num(x.n)+'<title>'+E(x.name)+': '+x.n+'</title></text>';
+  }).join('');
+  $('pie').innerHTML=sectors+leaders+'<circle cx="'+cx+'" cy="'+cy+'" r="57" fill="white"/><text x="'+cx+'" y="'+(cy-1)+'" text-anchor="middle" font-size="27" font-weight="bold" fill="#174363">'+num(total)+'</text><text x="'+cx+'" y="'+(cy+19)+'" text-anchor="middle" font-size="13" fill="#5b7185">VARADAS EN RUTA</text>';
+  $('leg').innerHTML='<div class="legend-heading"><span>RUTA</span><span>EVENTOS · %</span></div>'+data.map(([name,n],i)=>'<div class="legend-row"><span class="legend-swatch" style="background:'+color(i)+'"></span><span class="legend-name">'+E(name)+'</span><b class="legend-value">'+num(n)+' · '+(n/total*100).toLocaleString('es-CO',{minimumFractionDigits:1,maximumFractionDigits:1})+'%</b></div>').join('');
+}
+
+function renderCauses(rows){
+  const shown=cnt(rows,'c').slice(0,10),total=rows.length;
+  $('causesSummary').textContent=total?exactCaption()+'. '+num(total)+' eventos registrados. Se muestran '+num(shown.length)+' causas.':'No hay novedades para los filtros aplicados.';
+  bars('cb',shown.map(([cause,n])=>[cause,n,percent(n/total*100)+' del total filtrado']),{unit:'Número de eventos'});
+}
+function annualVehicleRows(){
+  const year=A.length?A[A.length-1].d.getFullYear():null;
+  const owner=$('owner').value,place=$('place').value||'En ruta';
+  const fields=[['type','t'],['route','r'],['cause','c'],['rep','p']];
+  return {year,owner,place,rows:A.filter(x=>x.d.getFullYear()===year&&(!owner||x.o===owner)&&x.l===place&&fields.every(([id,key])=>!$(id).value||x[key]===$(id).value))};
+}
+function renderDiagnostics(rows){
+  const annual=annualVehicleRows(),rt=annual.rows,vehicles=cnt(rt,'v').slice(0,10);
+  const inRoute=annual.place==='En ruta';
+  $('vehiclesTitle').textContent='Top 10 anual · Vehículos con más '+(inRoute?'varadas en ruta':'novedades');
+  $('vehiclesSummary').textContent=(annual.year?'Año '+annual.year:'Sin año disponible')+' · Propietario: '+(annual.owner||'Todos')+' · Lugar: '+annual.place+'. Los vehículos mostrados reúnen '+num(vehicles.reduce((n,x)=>n+x[1],0))+' de '+num(rt.length)+' '+(inRoute?'varadas en ruta':'novedades')+'.';
+  bars('vehicleBars',vehicles.map(([vehicle,n])=>{const cause=cnt(rt.filter(x=>x.v===vehicle),'c')[0];return ['Vehículo '+vehicle,n,cause?cause[0]+' · '+num(cause[1])+' reportes':'']}),{unit:inRoute?'Número de varadas en ruta':'Número de novedades'});
+  renderCauses(rows);
+}
+
+function reportPeriod(from,to,rows=[]){
+  const format=value=>new Intl.DateTimeFormat('es-CO',{day:'2-digit',month:'2-digit',year:'numeric'}).format(value);
+  if(from&&!to)return 'al período desde el '+format(dt(from));
+  if(to&&!from)return 'al período hasta el '+format(dt(to));
+  let start=from?dt(from):rows[0]?.d,end=to?dt(to):rows.at(-1)?.d;
+  if(!start||!end)return 'al período consultado';
+  if(start>end)[start,end]=[end,start];
+  if(iso(start)===iso(end))return 'al '+format(start);
+  const sameMonth=start.getFullYear()===end.getFullYear()&&start.getMonth()===end.getMonth();
+  if(sameMonth){
+    const month=new Intl.DateTimeFormat('es-CO',{month:'long',year:'numeric'}).format(start);
+    if(start.getDate()===1&&end.getDate()===new Date(end.getFullYear(),end.getMonth()+1,0).getDate())return 'al mes de '+month;
+    return 'al período del '+start.getDate()+' al '+end.getDate()+' de '+month;
+  }
+  return 'al período del '+format(start)+' al '+format(end);
+}
+function renderAnalysis(technical){
+  const d=fil().sort((a,b)=>a.d-b.d),rt=d.filter(x=>x.l==='En ruta'),total=d.length;
+  const period=reportPeriod($('from').value,$('to').value,d);
+  const scope=Object.entries({owner:'Propietario',place:'Lugar',type:'Tipología',route:'Ruta',cause:'Causa',rep:'Reportado por'}).filter(([id])=>$(id).value).map(([id,label])=>label+': '+$(id).value).join(' · ');
+  $('emailSubject').textContent='Asunto: Resumen de novedades y plan de mantenimiento '+period+(scope?' · '+scope:'');
+  if(!total){
+    $('read').innerHTML='<p><b>Buenos días,</b></p><p>Comparto el resumen de novedades correspondientes <b>'+E(period)+'</b>. No se encontraron eventos con los filtros aplicados.</p><h3>Plan de acción para Mantenimiento</h3><p>Validar el período y los filtros antes de programar intervenciones. Esta consulta no aporta eventos para definir un vehículo o una ruta prioritaria.</p>';
+    return;
+  }
+  const causes=cnt(d,'c'),routes=cnt(rt.map(x=>({...x,r:routeName(x.r)})),'r');
+  const groups=new Map();
+  d.forEach(x=>{
+    const key=JSON.stringify([x.v,N(x.c)]);
+    if(!groups.has(key))groups.set(key,{vehicle:x.v,cause:x.c,n:0,last:x.d});
+    const row=groups.get(key);row.n++;if(x.d>row.last)row.last=x.d;
+  });
+  const sorted=[...groups.values()].sort((a,b)=>b.n-a.n||b.last-a.last||a.vehicle.localeCompare(b.vehicle,'es',{numeric:true}));
+  const top=sorted[0],cause=causes[0],route=routes[0],ties=sorted.filter(x=>x.n===top.n).length;
+  const eventWord=n=>n===1?'evento':'eventos',reportWord=n=>n===1?'reporte':'reportes';
+  const location=route?'La mayor concentración de varadas en ruta se ubicó en <b>'+E(route[0])+'</b> ('+num(route[1])+' '+(route[1]===1?'varada':'varadas')+' en ruta). ':'No se registraron varadas en ruta con los filtros aplicados. ';
+  const caseText=(top.n>1?'El caso que requiere seguimiento prioritario es el vehículo ':'Entre los casos para revisión se encuentra el vehículo ')+'<b>'+E(top.vehicle)+'</b>, asociado a <b>'+E(top.cause)+'</b>, con '+num(top.n)+' '+eventWord(top.n)+'. ';
+  const impact=rt.length===total?', con incidencia directa en la continuidad de la operación.':rt.length?', de los cuales '+num(rt.length)+' ocurrieron en ruta, con incidencia en la continuidad de la operación.':', sin varadas en ruta dentro de esta consulta.';
+  const intro='Comparto el resumen de novedades correspondientes <b>'+E(period)+'</b>. Se registraron <b>'+num(total)+'</b> '+eventWord(total)+impact;
+  const analysis=location+'La causa más frecuente fue <b>'+E(cause[0])+'</b> ('+num(cause[1])+' '+reportWord(cause[1])+'). '+caseText+(top.n===1?'Esta combinación tiene un solo reporte en el período. ':'')+'Se recomienda verificar la causa raíz, confirmar la efectividad de las intervenciones y dejar evidencia de la prueba funcional antes de liberar las unidades intervenidas.';
+  const diagnosis='Revisar el vehículo <b>'+E(top.vehicle)+'</b> por <b>'+E(top.cause)+'</b>, '+(top.n>1?'porque registra '+num(top.n)+' reportes de la misma causa y '+(ties>1?'comparte la mayor frecuencia de repetición':'concentra la mayor frecuencia de repetición')+' en el período.':'para validar el diagnóstico del evento reportado; no se identifica repetición de esta combinación dentro del período.')+' Validar causa raíz, repuesto y prueba funcional.';
+  const routeAction=route?'Inspeccionar preventivamente las unidades reportadas de <b>'+E(route[0])+'</b>; la ruta concentra '+num(route[1])+' '+(route[1]===1?'varada':'varadas')+' en ruta, lo que puede afectar la frecuencia y regularidad.':'Coordinar con Mantenimiento la revisión de las unidades del detalle; no se registra una ruta con varadas que justifique priorizarla en esta consulta.';
+  const closure='Registrar diagnóstico, responsable, componente intervenido y resultado de la prueba funcional antes de liberar los vehículos. En las unidades reincidentes, contrastar las nuevas novedades con las órdenes cerradas para comprobar la efectividad de la reparación.';
+  $('read').innerHTML='<p><b>Buenos días,</b></p><p>'+intro+'</p><p>'+analysis+'</p><h3>Plan de acción para Mantenimiento</h3><p><b>1. Diagnóstico focalizado:</b> '+diagnosis+'</p><p><b>2. Acción por ruta:</b> '+routeAction+'</p><p><b>3. Cierre verificable:</b> '+closure+'</p>';
+}
+
+function exportMode(width,height){
+  if(height>16000||width*height>28000000)return {format:'svg',scale:1};
+  return {format:'png',scale:Math.min(2,16000/height,Math.sqrt(28000000/(width*height)))};
+}
+function downloadBlob(blob,name){
+  const url=URL.createObjectURL(blob),link=document.createElement('a');
+  link.href=url;link.download=name;link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function downloadFullSvg(board,width,height){
+  const copy=board.cloneNode(true);
+  copy.style.position='relative';copy.style.left='0';copy.style.top='0';copy.style.width=width+'px';
+  const styles=[...document.querySelectorAll('head style')].map(x=>x.textContent).join('\n');
+  const markup=new XMLSerializer().serializeToString(copy);
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+width+'" height="'+height+'" viewBox="0 0 '+width+' '+height+'"><style>'+styles.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</style><foreignObject width="100%" height="100%">'+markup+'</foreignObject></svg>';
+  downloadBlob(new Blob([svg],{type:'image/svg+xml;charset=utf-8'}),'infografia_novedades_dc_equipos_completa.svg');
+}
+$('export').onclick=async()=>{
+  const ids=[...document.querySelectorAll('#exportBox input:checked')].map(x=>x.value);
+  if(!ids.length)return alert('Seleccione al menos una sección para generar la imagen.');
+  const board=document.createElement('div');
+  board.className='export-board';
+  board.style.cssText='position:absolute;left:-10000px;top:0;width:1400px;padding:34px;background:#f4f8fb;color:#1b3042;font-family:Arial';
+  const labels={from:'Desde',to:'Hasta',owner:'Propietario',place:'Lugar',type:'Tipología',route:'Ruta',cause:'Causa',rep:'Reportado por'};
+  const scope=Object.entries(labels).filter(([id])=>$(id).value).map(([id,label])=>label+': '+$(id).value).join(' · ');
+  board.innerHTML='<h1 style="color:#10304f;margin:0 0 4px">Tablero Ejecutivo de Novedades en Ruta</h1><p style="margin:0 0 24px;color:#5b7185">'+E(scope||'Sin filtros aplicados')+'</p>';
+  ids.forEach(id=>{
+    const src=document.querySelector('[data-export="'+id+'"]');
+    if(!src)return;
+    const copy=src.cloneNode(true);
+    copy.style.margin='0 0 18px';copy.style.maxWidth='100%';copy.style.maxHeight='none';copy.style.overflow='visible';
+    copy.querySelectorAll('.tip,.export-hide').forEach(x=>x.remove());copy.querySelectorAll('details').forEach(x=>x.open=true);
+    copy.querySelectorAll('.table,.legend,#tb,#mb,.scroll-panel').forEach(x=>{x.style.maxHeight='none';x.style.height='auto';x.style.overflow='visible'});
+    if(id==='route')copy.querySelectorAll('.pie').forEach(x=>{x.style.display='grid';x.style.gridTemplateColumns='1fr 1fr';x.style.gap='24px'});
+    board.appendChild(copy);
+  });
+  document.body.appendChild(board);
+  $('export').disabled=true;$('exportStatus').textContent='Preparando todas las filas y secciones seleccionadas…';
+  try{
+    if(document.fonts?.ready)await document.fonts.ready;
+    const width=1400,height=Math.ceil(board.scrollHeight),mode=exportMode(width,height);
+    if(mode.format==='svg'||!window.html2canvas){
+      downloadFullSvg(board,width,height);
+      $('exportStatus').textContent='Descargada una sola imagen SVG con todas las filas, sin recortes. Puedes abrirla en el navegador.';
+    }else{
+      const canvas=await html2canvas(board,{scale:mode.scale,backgroundColor:'#f4f8fb',useCORS:true,windowWidth:1440,width,height,scrollY:0,scrollX:0});
+      const url=canvas.toDataURL('image/png');
+      if(url==='data:,')throw Error('La imagen excede la capacidad del navegador.');
+      const link=document.createElement('a');link.href=url;link.download='infografia_novedades_dc_equipos.png';link.click();
+      $('exportStatus').textContent='Descargada una sola imagen PNG con todas las secciones seleccionadas.';
+    }
+  }catch(error){
+    try{downloadFullSvg(board,1400,Math.ceil(board.scrollHeight));$('exportStatus').textContent='Descargada la imagen completa en SVG para conservar todas las filas.'}
+    catch(fallbackError){$('exportStatus').textContent='No fue posible generar la imagen. Intenta la descarga nuevamente.'}
+  }finally{board.remove();$('export').disabled=false}
+};
+
+$('exportPdf').onclick=async()=>{
+  const ids=[...document.querySelectorAll('#exportBox input:checked')].map(x=>x.value);
+  if(!ids.length)return alert('Seleccione al menos una sección para generar el PDF.');
+  const popup=window.open('','_blank');
+  if(!popup){$('exportStatus').textContent='Permite la ventana emergente para abrir la vista de impresión del PDF.';return}
+  const styles=[...document.querySelectorAll('head style')].map(x=>x.textContent).join('\n');
+  const labels={from:'Desde',to:'Hasta',owner:'Propietario',place:'Lugar de novedad',type:'Tipología',route:'Ruta',cause:'Causa',rep:'Reportado por'};
+  const scope=Object.entries(labels).filter(([id])=>$(id).value).map(([id,label])=>label+': '+$(id).value).join(' · ');
+  const sections=ids.map(id=>{
+    const source=document.querySelector('[data-export="'+id+'"]');if(!source)return '';
+    const copy=source.cloneNode(true);
+    copy.querySelectorAll('.tip,.export-hide').forEach(x=>x.remove());
+    copy.querySelectorAll('details').forEach(x=>x.open=true);
+    copy.querySelectorAll('.table,.legend,#tb,#mb,.scroll-panel').forEach(x=>{x.style.maxHeight='none';x.style.height='auto';x.style.overflow='visible'});
+    return copy.outerHTML;
+  }).join('');
+  const printCSS=`
+    @page{size:A4 landscape;margin:12mm}
+    html,body{margin:0;padding:0;background:white!important;color:#1b3042;font-family:Arial,sans-serif}
+    .pdf-board{max-width:none;margin:0;padding:0}
+    .pdf-board .box,.pdf-board .kpis{margin:0 0 16px;width:100%;box-sizing:border-box}
+    .pdf-board .box{padding:14px;box-shadow:none;break-inside:avoid}
+    .pdf-board [data-export="detail"],.pdf-board [data-export="technical"]{break-inside:auto}
+    .pdf-board .table,.pdf-board .legend,.pdf-board .scroll-panel,.pdf-board #tb,.pdf-board #mb{height:auto!important;max-height:none!important;overflow:visible!important}
+    .pdf-board table{width:100%;min-width:0!important;table-layout:fixed;border-collapse:collapse}
+    .pdf-board th,.pdf-board td{overflow-wrap:anywhere;font-size:10pt;padding:7px}
+    .pdf-board thead{position:static!important;display:table-header-group}
+    .pdf-board tfoot{display:table-row-group}
+    .pdf-board tr,.pdf-board .bar{break-inside:avoid;page-break-inside:avoid}
+    .pdf-board h2{break-after:avoid;font-size:16pt}
+    .pdf-board .kpis{display:grid;grid-template-columns:repeat(3,1fr)!important;break-inside:avoid}
+    .pdf-board .pie{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .pdf-board svg{max-width:100%;height:auto}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .pdf-help{padding:12px;background:#eaf3fa;margin-bottom:16px}
+    @media print{.pdf-help{display:none!important}}
+  `;
+  popup.document.open();
+  popup.document.write('<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Informe de novedades D&amp;C Equipos</title><style>'+styles+'\n'+printCSS+'</style></head><body><div class="pdf-help">En el destino de impresión selecciona <b>Guardar como PDF</b>. Si necesitas volver a abrir la impresión, pulsa Ctrl+P.</div><main class="pdf-board"><h1>Informe de novedades · D&amp;C Equipos</h1><p>'+E(scope||'Sin filtros aplicados')+'</p><p>Generado: '+E(new Intl.DateTimeFormat('es-CO',{timeZone:'America/Bogota',dateStyle:'long'}).format(new Date()))+'</p>'+sections+'</main></body></html>');
+  popup.document.close();
+  try{
+    if(popup.document.fonts?.ready)await popup.document.fonts.ready;
+    popup.focus();popup.print();
+    $('exportStatus').textContent='Vista preparada con todas las secciones seleccionadas. Elige Guardar como PDF en la ventana de impresión.';
+  }catch(error){$('exportStatus').textContent='La vista del PDF está abierta. Pulsa Ctrl+P en esa ventana para guardarla.'}
+};
+
+const renderDashboard=render;
+render=function(){renderDashboard();renderAnalysis(TechnicalTable.render())};
+$('rollingToggle').onchange=()=>line();
+['from','to','owner','place','type','route','cause','rep'].forEach(id=>$(id).onchange=render);load(window.INITIAL_ROWS||[]);
+</script></body></html>
